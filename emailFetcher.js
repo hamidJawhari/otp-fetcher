@@ -40,7 +40,6 @@ function fetchOtp(mail, pass) {
                                     const parsedEmail = await parseEmail(msg);
                                     markEmailAsSeen(imap, uid);
                                     const finalOtp = extractOTP(parsedEmail.text);
-                                    console.log('The OTP from fetchEmail is ' + finalOtp);
                                     resolve(finalOtp);
                                 } catch (err) {
                                     console.error('Error parsing email:', err);
