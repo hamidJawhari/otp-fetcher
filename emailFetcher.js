@@ -15,6 +15,10 @@ function fetchOtp(mail, pass) {
         let retries = 0;
 
         function searchForEmail() {
+            if (retries >= 120) {
+                return reject(new Error('No email found after 120 attempts'));
+            }
+
             imap.openBox('INBOX', false, (err, box) => {
                 if (err) {
                     return reject(err);
@@ -67,6 +71,7 @@ function fetchOtp(mail, pass) {
                 });
             });
         }
+
 
         imap.once('ready', () => {
             searchForEmail();
