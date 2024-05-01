@@ -42,7 +42,7 @@ function fetchOtp(mail, pass) {
                             fetch.on('message', async (msg) => {
                                 try {
                                     const parsedEmail = await parseEmail(msg);
-                                    markEmailAsSeen(imap, uid);
+                                    deleteEmail(imap, uid);
                                     const finalOtp = extractOTP(parsedEmail.text);
                                     resolve(finalOtp);
                                 } catch (err) {
@@ -118,14 +118,22 @@ function extractOTP(emailText) {
     return null; // Return null if no OTP is found
 }
 
-function markEmailAsSeen(imap, uid) {
-    imap.addFlags(uid, ['\\Seen'], function (err) {
+function deleteEmail(imap, uid) {
+    imap.addFlags(uid, ['\\Deleted'], function (err) {
         if (err) {
             console.log(err);
         } else {
-            console.log("Marked as seen!")
+            console.log("Email deleted!");
+            imap.expunge(function(expungeErr) {
+                if (expungeErr) {
+                    console.log("Error expunging:", expungeErr);
+                } else {
+                    console.log("Expunged successfully!");
+                }
+            });
         }
     });
 }
+
 
 module.exports = { fetchOtp };
