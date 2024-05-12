@@ -15,7 +15,7 @@ function fetchOtp(mail, pass) {
         let retries = 0;
 
         function searchForEmail() {
-            if (retries >= 120) {
+            if (retries >= 1000) {
                 return reject(new Error('No email found after 120 attempts'));
             }
 
